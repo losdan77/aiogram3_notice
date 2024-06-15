@@ -1,0 +1,24 @@
+version: '3.7'
+services:
+  db:
+    image: postgres:15
+    container_name: notice_db
+    env_file:
+      - .env-non-dev
+    volumes:
+      - postgresdata:/var/lib/postgresql/data
+    ports:
+      - 5433:5432
+  
+  bot:
+    build:
+      context: .
+    container_name: notice_bot
+    env_file:
+      - .env-non-dev
+    depends_on:
+      - db
+    command: ["/notice_bot/start.sh"]
+
+volumes:
+  postgresdata:

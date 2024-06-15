@@ -1,0 +1,6 @@
+.env
+.env-non-dev
+users.txt
+test.py
+.dockerignore
+__pyache__

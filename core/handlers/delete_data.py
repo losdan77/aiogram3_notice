@@ -16,7 +16,7 @@ async def start_delete_by_id(message: Message, state: FSMContext):
 async def delete_by_id(message: Message, state: FSMContext):
     user_id = message.from_user.id
     id = message.text
-    result_delete = await AccoutingDAO.delete_by_id(user_id, int(id))
+    result_delete = await AccoutingDAO.delete_by_id(str(user_id), int(id))
 
     if result_delete:
         await message.answer(f'<b>Удалено</b>', reply_markup=main_keyboard,

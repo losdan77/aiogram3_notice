@@ -23,7 +23,7 @@ jobs:
       with:
         ssh-private-key: ${{ secrets.DEPLOY_SSH_KEY }}
 
-    # 3. Установим docker-Compose
+    # 3. Установим docker-compose
     - name: Install Docker Compose
       run: |
         sudo apt-get update

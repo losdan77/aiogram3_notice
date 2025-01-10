@@ -6,7 +6,7 @@ services:
     env_file:
       - .env-non-dev
     volumes:
-      - postgresdata:/var/lib/postgresql/data
+      - postgresdata:/var/lib/postgresql/data_bot_notice
     ports:
       - 5433:5432
   

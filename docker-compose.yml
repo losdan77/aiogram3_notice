@@ -1,4 +1,3 @@
-version: '3.7'
 services:
   db:
     image: postgres:15
@@ -6,9 +5,9 @@ services:
     env_file:
       - .env-non-dev
     volumes:
-      - postgresdata:/var/lib/postgresql/data_bot_notice
+      - postgresdata:/var/lib/postgresql/data
     ports:
-      - 5433:5432
+      - 5432:5432
   
   bot:
     build:

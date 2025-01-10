@@ -1,0 +1,59 @@
+name: CI/CD for Support App
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    # 1. Checkout кода
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # 2. Настройка SSH
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.DEPLOY_SSH_KEY }}
+
+    # 3. Установим docker-Compose
+    - name: Install Docker Compose
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y docker-compose
+    
+    # 4. Создаём файл .env-non-dev из секретов
+    - name: Create .env-non-dev file
+      run: echo "${{ secrets.ENV_NON_DEV }}" > ./.env-non-dev
+
+    # 6. Проверка Docker Compose
+    - name: Lint Docker Compose
+      run: docker-compose -f docker-compose.yml config
+
+    # 7. Сборка Docker образов
+    - name: Build Docker images
+      run: |
+        docker-compose -f docker-compose.yml build
+
+    # 8. Копирование файлов на сервер
+    - name: Deploy files to server
+      run: |
+        ssh -o StrictHostKeyChecking=no los@176.123.167.12 "mkdir -p ~/bot_notice"
+        rsync -avz --exclude=".git" ./ los@176.123.167.12:~/bot_notice/
+
+    # 10. Запуск Docker Compose на сервере
+    - name: Restart application
+      run: |
+        ssh -o StrictHostKeyChecking=no los@176.123.167.12 << 'EOF'
+          cd ~/bot_notice
+          sudo docker-compose down
+          sudo docker-compose build
+          sudo docker-compose up -d
+        EOF

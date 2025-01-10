@@ -133,4 +133,4 @@ async def check_pay_notice(bot: Bot):
                                '<b>Напоминания через 3 дня:</b>',
                                parse_mode='HTML')
             for for_3_days_notice in list_for_3_days_notice:
-                await bot.send_message(str(user_id), f'{str(tommorow_notice["text"])} - {for_3_days_notice["price"]}руб.')
+                await bot.send_message(str(user_id), f'{str(for_3_days_notice["text"])} - {for_3_days_notice["price"]}руб.')
